@@ -15,7 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 export default function LoginPage() {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
-  const [email, setEmail] = useState("admin@boutiqueakka.com");
+  const [email, setEmail] = useState("admin@boutiqueos.com");
   const [password, setPassword] = useState("demo123");
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState("");
@@ -50,13 +50,10 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-16 py-10">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-[hsl(var(--primary))] text-white grid place-items-center font-display font-bold text-lg">
-            A
+            B
           </div>
           <div className="leading-tight">
-            <div className="font-display font-semibold">Akka Boutique</div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--muted-foreground))]">
-              Manager
-            </div>
+            <div className="font-display font-semibold">BoutiqueOS</div>
           </div>
         </div>
 
@@ -143,7 +140,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-xs text-[hsl(var(--muted-foreground))] pt-6">
-          © {new Date().getFullYear()} Akka Boutique Manager. Crafted for India.
+          © {new Date().getFullYear()} BoutiqueOS. Crafted for India.
         </div>
       </div>
 
@@ -175,12 +172,12 @@ export default function LoginPage() {
           {[
             {
               role: "Admin",
-              email: "admin@boutiqueakka.com",
+              email: "admin@boutiqueos.com",
               hint: "Full access — dashboard, inventory, GST",
             },
             {
               role: "Staff",
-              email: "staff@boutiqueakka.com",
+              email: "staff@boutiqueos.com",
               hint: "Billing-first view, barcode + stock checks",
             },
           ].map((acc) => (
@@ -216,7 +213,7 @@ export default function LoginPage() {
               key={s.k}
               className="rounded-xl bg-white/[0.04] border border-white/10 p-3"
             >
-              <div className="font-display text-2xl font-semibold">{s.v}</div>
+              <div className="text-2xl font-semibold tabular-nums">{s.v}</div>
               <div className="text-[11px] uppercase tracking-[0.16em] text-white/60 mt-1">
                 {s.k}
               </div>

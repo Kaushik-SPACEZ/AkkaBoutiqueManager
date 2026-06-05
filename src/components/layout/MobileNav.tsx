@@ -14,7 +14,7 @@ const items = [
   { to: "/billing", label: "Billing", icon: Receipt },
   { to: "/inventory", label: "Stock", icon: Package },
   { to: "/barcode", label: "Barcode", icon: QrCode },
-  { to: "/gst", label: "GST", icon: FileBarChart },
+  { to: "/reports", label: "Reports", icon: FileBarChart },
   { to: "/settings", label: "More", icon: Settings },
 ];
 

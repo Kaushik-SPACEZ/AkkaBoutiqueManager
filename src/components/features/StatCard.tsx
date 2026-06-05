@@ -25,7 +25,7 @@ export default function StatCard({
           <div className="text-xs uppercase tracking-[0.16em] text-[hsl(var(--muted-foreground))] font-medium">
             {label}
           </div>
-          <div className="mt-2 font-display text-3xl font-semibold tracking-tight">
+          <div className="mt-2 text-3xl font-semibold tracking-tight tabular-nums">
             {value}
           </div>
         </div>

@@ -17,8 +17,10 @@ const items = [
   { to: "/billing", label: "Billing", icon: Receipt },
   { to: "/inventory", label: "Inventory", icon: Package },
   { to: "/barcode", label: "Barcode Printing", icon: QrCode },
-  { to: "/gst", label: "GST Reports", icon: FileBarChart },
+  { to: "/reports", label: "Reports", icon: FileBarChart },
   { to: "/settings", label: "Settings", icon: Settings },
+  // Hidden for now - GST Reports (keeping for future use)
+  // { to: "/gst", label: "GST Reports", icon: FileBarChart },
 ];
 
 export default function Sidebar() {
@@ -36,14 +38,11 @@ export default function Sidebar() {
       <div className="px-6 pt-6 pb-5 border-b border-[hsl(var(--sidebar-border))]">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] grid place-items-center font-display font-bold text-lg">
-            A
+            B
           </div>
           <div className="leading-tight">
             <div className="font-display text-base font-semibold text-white">
-              Akka Boutique
-            </div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--sidebar-foreground))]/60">
-              Manager
+              BoutiqueOS
             </div>
           </div>
         </div>

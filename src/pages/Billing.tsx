@@ -349,10 +349,10 @@ export default function Billing() {
               </div>
             </div>
             <div className="flex items-center justify-between pt-3 border-t border-dashed border-[hsl(var(--border))]">
-              <span className="font-display text-base font-semibold">
+              <span className="text-base font-semibold">
                 Grand Total
               </span>
-              <span className="font-display text-2xl font-semibold tabular-nums">
+              <span className="text-2xl font-semibold tabular-nums">
                 {inr(total)}
               </span>
             </div>
@@ -485,7 +485,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         <div className="flex items-start justify-between border-b pb-4 border-[hsl(var(--border))]">
           <div>
             <div className="font-display text-2xl font-semibold">
-              Akka Boutique
+              BoutiqueOS
             </div>
             <div className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
               45, Pondy Bazaar, T. Nagar, Chennai 600017
@@ -592,10 +592,10 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <span className="tabular-nums">- {inr2(discount)}</span>
             </div>
             <div className="flex justify-between border-t border-[hsl(var(--border))] pt-2 mt-2">
-              <span className="font-display text-base font-semibold">
+              <span className="text-base font-semibold">
                 Total
               </span>
-              <span className="font-display text-base font-semibold tabular-nums">
+              <span className="text-base font-semibold tabular-nums">
                 {inr(total)}
               </span>
             </div>
@@ -603,7 +603,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
 
         <div className="border-t border-[hsl(var(--border))] mt-6 pt-4 text-[11px] text-[hsl(var(--muted-foreground))] flex justify-between">
-          <span>Thank you for shopping at Akka Boutique.</span>
+          <span>Thank you for shopping with BoutiqueOS.</span>
           <span>This is a computer-generated invoice.</span>
         </div>
       </div>

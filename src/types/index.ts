@@ -13,6 +13,9 @@ export interface Product {
   sku: string;
   barcode: string;
   category: string;
+  color: string;
+  size: string;
+  material: string;
   quantity: number;
   purchasePrice: number;
   sellingPrice: number;

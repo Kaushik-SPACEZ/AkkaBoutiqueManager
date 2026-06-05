@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import TopBar from "@/components/layout/TopBar";
 import StatCard from "@/components/features/StatCard";
-import { CATEGORIES, PRODUCTS } from "@/lib/mockData";
+import { CATEGORIES, PRODUCTS, colorsByCategory, sizesByCategory, materialsByCategory } from "@/lib/mockData";
 import { inr, num } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types";
@@ -39,7 +39,9 @@ export default function Inventory() {
       return (
         p.name.toLowerCase().includes(q) ||
         p.sku.toLowerCase().includes(q) ||
-        p.barcode.includes(q)
+        p.barcode.includes(q) ||
+        p.color.toLowerCase().includes(q) ||
+        p.material.toLowerCase().includes(q)
       );
     });
   }, [products, query, activeCat, statusFilter]);
@@ -117,7 +119,7 @@ export default function Inventory() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name, SKU or barcode"
+              placeholder="Search by name, SKU, barcode, color or material"
               className="flex-1 bg-transparent text-sm outline-none"
             />
             {query && (
@@ -162,7 +164,7 @@ export default function Inventory() {
         </div>
 
         <div className="overflow-x-auto scrollbar-thin">
-          <table className="w-full text-sm min-w-[860px]">
+          <table className="w-full text-sm min-w-[1000px]">
             <thead className="text-left bg-[hsl(var(--secondary))]/30">
               <tr className="text-[11px] uppercase tracking-[0.14em] text-[hsl(var(--muted-foreground))]">
                 <th className="py-3 px-4 font-semibold">
@@ -173,12 +175,10 @@ export default function Inventory() {
                 <th className="py-3 px-4 font-semibold">SKU</th>
                 <th className="py-3 px-4 font-semibold">Barcode</th>
                 <th className="py-3 px-4 font-semibold">Category</th>
+                <th className="py-3 px-4 font-semibold">Variant</th>
                 <th className="py-3 px-4 font-semibold text-right">Qty</th>
-                <th className="py-3 px-4 font-semibold text-right">
-                  Cost
-                </th>
+                <th className="py-3 px-4 font-semibold text-right">Cost</th>
                 <th className="py-3 px-4 font-semibold text-right">Price</th>
-                <th className="py-3 px-4 font-semibold text-right">GST</th>
                 <th className="py-3 px-4 font-semibold">Status</th>
                 <th className="py-3 px-4" />
               </tr>
@@ -205,7 +205,7 @@ export default function Inventory() {
                           loading="lazy"
                         />
                         <div className="min-w-0">
-                          <div className="font-semibold truncate max-w-[260px]">
+                          <div className="font-semibold truncate max-w-[220px]">
                             {p.name}
                           </div>
                           <div className="text-xs text-[hsl(var(--muted-foreground))]">
@@ -215,10 +215,27 @@ export default function Inventory() {
                       </div>
                     </td>
                     <td className="py-3 px-4 font-mono text-xs">{p.sku}</td>
-                    <td className="py-3 px-4 font-mono text-xs">
-                      {p.barcode}
-                    </td>
+                    <td className="py-3 px-4 font-mono text-xs">{p.barcode}</td>
                     <td className="py-3 px-4">{p.category}</td>
+                    <td className="py-3 px-4">
+                      <div className="flex flex-wrap gap-1">
+                        {p.color && (
+                          <span className="px-2 py-0.5 rounded-md bg-[hsl(var(--secondary))] text-[11px] font-medium">
+                            {p.color}
+                          </span>
+                        )}
+                        {p.size && (
+                          <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[11px] font-medium">
+                            {p.size}
+                          </span>
+                        )}
+                        {p.material && (
+                          <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[11px] font-medium">
+                            {p.material}
+                          </span>
+                        )}
+                      </div>
+                    </td>
                     <td className="py-3 px-4 text-right tabular-nums font-semibold">
                       {p.quantity}
                     </td>
@@ -227,9 +244,6 @@ export default function Inventory() {
                     </td>
                     <td className="py-3 px-4 text-right tabular-nums font-semibold">
                       {inr(p.sellingPrice)}
-                    </td>
-                    <td className="py-3 px-4 text-right tabular-nums">
-                      {p.gst}%
                     </td>
                     <td className="py-3 px-4">
                       <span
@@ -298,7 +312,9 @@ interface DialogProps {
   onClose: () => void;
   onSave: (p: Product) => void;
 }
+
 function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
+  const defaultCategory = "Sarees";
   const [form, setForm] = useState<Product>(
     product ?? {
       id: `P${Date.now()}`,
@@ -309,7 +325,10 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
       )
         .toString()
         .padStart(12, "0")}`.slice(0, 13),
-      category: "Sarees",
+      category: defaultCategory,
+      color: colorsByCategory[defaultCategory][0],
+      size: sizesByCategory[defaultCategory][0],
+      material: materialsByCategory[defaultCategory][0],
       quantity: 10,
       purchasePrice: 1000,
       sellingPrice: 1500,
@@ -321,9 +340,19 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
     }
   );
 
+  function handleCategoryChange(cat: string) {
+    setForm({
+      ...form,
+      category: cat,
+      color: colorsByCategory[cat]?.[0] ?? "",
+      size: sizesByCategory[cat]?.[0] ?? "",
+      material: materialsByCategory[cat]?.[0] ?? "",
+    });
+  }
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm grid place-items-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-[hsl(var(--border))]">
           <div>
             <div className="text-[11px] uppercase tracking-[0.16em] text-[hsl(var(--muted-foreground))] font-semibold">
@@ -340,34 +369,23 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="p-5 grid grid-cols-2 gap-3">
+
+        <div className="p-5 overflow-y-auto flex-1 grid grid-cols-2 gap-3 content-start">
+          {/* Row 1: Name (full width) */}
           <Field label="Product Name" full>
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="input"
+              placeholder="e.g. Kanchipuram Silk Saree"
             />
           </Field>
-          <Field label="SKU">
-            <input
-              value={form.sku}
-              onChange={(e) => setForm({ ...form, sku: e.target.value })}
-              className="input"
-            />
-          </Field>
-          <Field label="Barcode">
-            <input
-              value={form.barcode}
-              onChange={(e) => setForm({ ...form, barcode: e.target.value })}
-              className="input font-mono"
-            />
-          </Field>
+
+          {/* Row 2: Category + Material */}
           <Field label="Category">
             <select
               value={form.category}
-              onChange={(e) =>
-                setForm({ ...form, category: e.target.value })
-              }
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className="input"
             >
               {CATEGORIES.map((c) => (
@@ -375,16 +393,43 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
               ))}
             </select>
           </Field>
-          <Field label="Quantity">
-            <input
-              type="number"
-              value={form.quantity}
-              onChange={(e) =>
-                setForm({ ...form, quantity: Number(e.target.value) })
-              }
+          <Field label="Material">
+            <select
+              value={form.material}
+              onChange={(e) => setForm({ ...form, material: e.target.value })}
               className="input"
-            />
+            >
+              {(materialsByCategory[form.category] ?? []).map((m) => (
+                <option key={m}>{m}</option>
+              ))}
+            </select>
           </Field>
+
+          {/* Row 3: Color + Size */}
+          <Field label="Color">
+            <select
+              value={form.color}
+              onChange={(e) => setForm({ ...form, color: e.target.value })}
+              className="input"
+            >
+              {(colorsByCategory[form.category] ?? []).map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Size">
+            <select
+              value={form.size}
+              onChange={(e) => setForm({ ...form, size: e.target.value })}
+              className="input"
+            >
+              {(sizesByCategory[form.category] ?? []).map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+          </Field>
+
+          {/* Row 4: Purchase Price + Selling Price */}
           <Field label="Purchase Price (₹)">
             <input
               type="number"
@@ -405,6 +450,18 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
               className="input"
             />
           </Field>
+
+          {/* Row 5: Quantity + GST */}
+          <Field label="Quantity">
+            <input
+              type="number"
+              value={form.quantity}
+              onChange={(e) =>
+                setForm({ ...form, quantity: Number(e.target.value) })
+              }
+              className="input"
+            />
+          </Field>
           <Field label="GST %">
             <input
               type="number"
@@ -415,14 +472,34 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
               className="input"
             />
           </Field>
+
+          {/* Row 6: Barcode + SKU */}
+          <Field label="Barcode">
+            <input
+              value={form.barcode}
+              onChange={(e) => setForm({ ...form, barcode: e.target.value })}
+              className="input font-mono"
+            />
+          </Field>
+          <Field label="SKU">
+            <input
+              value={form.sku}
+              onChange={(e) => setForm({ ...form, sku: e.target.value })}
+              className="input"
+            />
+          </Field>
+
+          {/* Row 7: Image URL (full width) */}
           <Field label="Image URL" full>
             <input
               value={form.image}
               onChange={(e) => setForm({ ...form, image: e.target.value })}
               className="input"
+              placeholder="https://..."
             />
           </Field>
         </div>
+
         <div className="p-5 border-t border-[hsl(var(--border))] flex justify-end gap-2">
           <button
             onClick={onClose}
@@ -434,7 +511,7 @@ function ProductDialog({ mode, product, onClose, onSave }: DialogProps) {
             onClick={() => onSave(form)}
             className="h-10 px-4 rounded-lg bg-[hsl(var(--primary))] text-white text-sm font-semibold"
           >
-            Save
+            {mode === "edit" ? "Save Changes" : "Add Product"}
           </button>
         </div>
       </div>

@@ -1,15 +1,15 @@
 import type { AuthUser } from "@/types";
 
-const KEY = "akka.auth";
+const KEY = "boutiqueos.auth";
 
 const ADMIN: AuthUser = {
-  email: "admin@boutiqueakka.com",
-  name: "Lakshmi (Owner)",
+  email: "admin@boutiqueos.com",
+  name: "Saranya (Owner)",
   role: "admin",
 };
 
 const STAFF: AuthUser = {
-  email: "staff@boutiqueakka.com",
+  email: "staff@boutiqueos.com",
   name: "Priya (Staff)",
   role: "staff",
 };

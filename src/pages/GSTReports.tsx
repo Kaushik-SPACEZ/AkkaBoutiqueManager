@@ -22,6 +22,7 @@ import StatCard from "@/components/features/StatCard";
 import { GST_MONTHS, INVOICES } from "@/lib/mockData";
 import { inr, num } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { exportToPDF, exportToExcel, formatCurrencyForExport } from "@/lib/exportUtils";
 
 export default function GSTReports() {
   const [selectedIdx, setSelectedIdx] = useState(GST_MONTHS.length - 1);
@@ -54,7 +55,48 @@ export default function GSTReports() {
               <Printer className="h-4 w-4" /> Print
             </button>
             <button
-              onClick={() => window.print()}
+              onClick={() =>
+                exportToExcel(
+                  "GST Report",
+                  ["Month", "Taxable Sales", "Output GST", "Taxable Purchases", "Input GST", "Net Payable"],
+                  GST_MONTHS.map((m) => [
+                    m.label,
+                    m.sales,
+                    m.outputGst,
+                    m.purchases,
+                    m.inputGst,
+                    m.payable,
+                  ]),
+                  [
+                    { label: "YTD Taxable Sales", value: ytdSales },
+                    { label: "YTD Input Tax Credit", value: ytdInput },
+                    { label: "YTD Net GST Payable", value: ytdPayable },
+                  ]
+                )
+              }
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-[hsl(var(--border))] bg-white text-sm font-semibold"
+            >
+              <Download className="h-4 w-4" /> Export Excel
+            </button>
+            <button
+              onClick={() =>
+                exportToPDF(
+                  "GST Report",
+                  ["Month", "Taxable Sales", "Output GST", "Input GST", "Net Payable"],
+                  GST_MONTHS.map((m) => [
+                    m.label,
+                    formatCurrencyForExport(m.sales),
+                    formatCurrencyForExport(m.outputGst),
+                    formatCurrencyForExport(m.inputGst),
+                    formatCurrencyForExport(m.payable),
+                  ]),
+                  [
+                    { label: "YTD Taxable Sales", value: formatCurrencyForExport(ytdSales) },
+                    { label: "YTD Input Tax Credit", value: formatCurrencyForExport(ytdInput) },
+                    { label: "YTD Net GST Payable", value: formatCurrencyForExport(ytdPayable) },
+                  ]
+                )
+              }
               className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[hsl(var(--primary))] text-white text-sm font-semibold"
             >
               <Download className="h-4 w-4" /> Export PDF
@@ -207,7 +249,7 @@ export default function GSTReports() {
           <div className="text-right text-xs text-[hsl(var(--muted-foreground))]">
             GSTIN 33AABCU9603R1ZM
             <br />
-            Akka Boutique, Chennai
+            BoutiqueOS, Chennai
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[hsl(var(--border))]">
@@ -267,7 +309,7 @@ export default function GSTReports() {
         <div className="px-5 py-3 border-t border-[hsl(var(--border))] text-[11px] text-[hsl(var(--muted-foreground))] flex items-center justify-between">
           <span>Filing reference: GSTR-3B • {month.label}</span>
           <span>
-            Generated {new Date().toLocaleDateString("en-IN")} • Akka Boutique
+            Generated {new Date().toLocaleDateString("en-IN")} • BoutiqueOS
           </span>
         </div>
       </section>
@@ -299,7 +341,7 @@ function Cell({
       >
         {label}
       </div>
-      <div className="font-display text-2xl font-semibold mt-1 tabular-nums">
+      <div className="text-2xl font-semibold mt-1 tabular-nums">
         {value}
       </div>
     </div>

@@ -65,7 +65,7 @@ export default function Dashboard() {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <TopBar
-        title="Good morning, Lakshmi"
+        title="Good morning, Saranya"
         subtitle="Here is what's happening at your boutique today."
         actions={
           <Link

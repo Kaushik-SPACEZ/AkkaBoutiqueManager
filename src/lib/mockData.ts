@@ -109,6 +109,33 @@ const baseSelling: Record<string, [number, number]> = {
   Accessories: [450, 5400],
 };
 
+const colorsByCategory: Record<string, string[]> = {
+  Sarees: ["Maroon", "Peacock Blue", "Gold", "Cream", "Red", "Green", "Purple", "Pink", "Navy", "Off-White"],
+  Kurtis: ["Pink", "White", "Sky Blue", "Yellow", "Peach", "Mint", "Lavender", "Coral"],
+  "Dress Materials": ["Beige", "Teal", "Rust", "Indigo", "Mustard", "Olive", "Burgundy"],
+  Blouses: ["Gold", "Red", "Black", "Wine", "Silver", "Green", "Blue"],
+  "Kids Collection": ["Pink", "Blue", "Yellow", "Red", "Purple", "Orange", "Multi"],
+  Accessories: ["Gold", "Silver", "Multi", "Antique", "Mustard", "Ivory"],
+};
+
+const sizesByCategory: Record<string, string[]> = {
+  Sarees: ["Free Size"],
+  Kurtis: ["XS", "S", "M", "L", "XL", "XXL"],
+  "Dress Materials": ["2.5m", "3m", "3.5m", "4m"],
+  Blouses: ["32", "34", "36", "38", "40", "42"],
+  "Kids Collection": ["2-3Y", "4-5Y", "6-7Y", "8-9Y", "10-11Y", "12-13Y"],
+  Accessories: ["Free Size"],
+};
+
+const materialsByCategory: Record<string, string[]> = {
+  Sarees: ["Pure Silk", "Cotton", "Tissue Silk", "Georgette", "Net", "Linen", "Organza", "Tussar"],
+  Kurtis: ["Cotton", "Rayon", "Silk", "Georgette", "Chanderi", "Chikankari"],
+  "Dress Materials": ["Cotton", "Chanderi", "Banarasi Silk", "Georgette", "Silk"],
+  Blouses: ["Silk", "Cotton", "Brocade", "Velvet", "Net"],
+  "Kids Collection": ["Cotton", "Silk", "Net", "Georgette", "Polyester"],
+  Accessories: ["Gold Plated", "Sterling Silver", "Silk", "Brass", "Fabric"],
+};
+
 const gstByCategory: Record<string, number> = {
   Sarees: 5,
   Kurtis: 5,
@@ -143,6 +170,8 @@ export const CATEGORIES = [
   "Accessories",
 ];
 
+export { colorsByCategory, sizesByCategory, materialsByCategory };
+
 function buildProducts(): Product[] {
   const out: Product[] = [];
   let i = 1;
@@ -161,6 +190,9 @@ function buildProducts(): Product[] {
         sku,
         barcode: makeBarcode(i),
         category: cat,
+        color: colorsByCategory[cat][n % colorsByCategory[cat].length],
+        size: sizesByCategory[cat][n % sizesByCategory[cat].length],
+        material: materialsByCategory[cat][n % materialsByCategory[cat].length],
         quantity: qty,
         purchasePrice: cost,
         sellingPrice: sell,
